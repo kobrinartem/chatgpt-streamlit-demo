@@ -1,6 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
+  AllowedIPs:
+    Type: String
+    Description: Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer
+    Default: "0.0.0.0/0"
+
   Repository:
     Type: String
     Description: The name of the ECR repository
@@ -179,6 +184,20 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
+
+  # Task role
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
       Policies:
         - PolicyName: ecs-task-policy
           PolicyDocument:
@@ -186,9 +205,9 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - ssm:GetParametersByPath
+                  - ssm:GetParameter
                 Resource:
-                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ChatGptApiKeyPath}/*"
+                  - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ChatGptApiKeyPath}"
               - Effect: Allow
                 Action:
                   - ssm:DescribeParameters
@@ -208,6 +227,7 @@ Resources:
       Cpu: 512
       Memory: 1024
       ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      TaskRoleArn: !GetAtt TaskRole.Arn
       ContainerDefinitions:
         - Name: chatgpt-streamlit
           Image: !Ref Repository
@@ -303,7 +323,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
+          CidrIp: !Ref AllowedIPs
       SecurityGroupEgress:
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0

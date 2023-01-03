@@ -8,6 +8,7 @@ This project includes a Streamlit-based chatbot operationalized in AWS using AWS
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
     - [CloudFormation Stack Deployment](#cloudformation-stack-deployment)
+      - [CloudFormation Parameters](#cloudformation-parameters)
     - [Docker Image Build](#docker-image-build)
   - [Usage](#usage)
   - [Support](#support)
@@ -19,9 +20,27 @@ This project includes a Streamlit-based chatbot operationalized in AWS using AWS
 
 To deploy the CloudFormation stack for this project, use the `./cf.yaml` file. You can do this using the AWS Management Console, the AWS CLI, or the AWS SDKs.
 
-For example, to deploy the stack using the AWS CLI, you can use the following command:
+#### CloudFormation Parameters
 
-```aws cloudformation create-stack --stack-name chatgpt-streamlit --template-body file://cf.yaml --capabilities CAPABILITY_IAM```
+| Parameter | Description | Default Value |
+| --- | --- | --- |
+| AllowedIPs | Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer | 0.0.0.0/0 |
+| Repository | The name of the ECR repository | public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest |
+| ChatGptApiKeyPath | ChatGPT API Key path in SSM Parameter Store | /openai/api_key |
+
+For example, to deploy the stack using the AWS CLI, you can use the following command with default values:
+
+```bash
+aws cloudformation create-stack --stack-name chatgpt-streamlit --template-body file://cf.yaml --capabilities CAPABILITY_IAM
+```
+
+For example, to deploy the stack using the AWS CLI, you can use the following command with custom values:
+
+```bash
+aws cloudformation create-stack --stack-name chatgpt-streamlit \
+--template-body file://cf.yaml \
+--parameters ParameterKey=AllowedIPs,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
+```
 
 This will create a new stack called `chatgpt-streamlit` using the `cf.yaml` template file and the `CAPABILITY_IAM` capability.
 
@@ -31,8 +50,9 @@ To build the Docker image for this project, use the `Dockerfile` in the `./app` 
 
 For example, to build the image using the `Dockerfile` in the current directory, you can use the following command:
 
-```docker build -t chatgpt-streamlit .```
-
+```bash
+docker build -t chatgpt-streamlit .
+```
 
 This will build the image and tag it with the name `chatgpt-streamlit`.
 
