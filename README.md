@@ -10,6 +10,7 @@ This project includes a Streamlit-based chatbot operationalized in AWS using AWS
     - [CloudFormation Stack Deployment](#cloudformation-stack-deployment)
       - [CloudFormation Parameters](#cloudformation-parameters)
     - [Docker Image Build](#docker-image-build)
+    - [Docker Container Run](#docker-container-run)
   - [Usage](#usage)
   - [Support](#support)
   - [Contributing](#contributing)
@@ -55,6 +56,16 @@ docker build -t chatgpt-streamlit .
 ```
 
 This will build the image and tag it with the name `chatgpt-streamlit`.
+
+### Docker Container Run
+
+```bash
+docker run -p 8501:8501 -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+  -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
+  -e AWS_DEFAULT_REGION="us-east-1" \
+  public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest
+```
 
 ## Usage
 
