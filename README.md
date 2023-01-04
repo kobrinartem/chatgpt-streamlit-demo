@@ -25,7 +25,7 @@ To deploy the CloudFormation stack for this project, use the `./cf.yaml` file. Y
 
 | Parameter | Description | Default Value |
 | --- | --- | --- |
-| AllowedIPs | Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer | 0.0.0.0/0 |
+| AllowedIP | Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer | 0.0.0.0/0 |
 | Repository | The name of the ECR repository | public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest |
 | ChatGptApiKeyPath | ChatGPT API Key path in SSM Parameter Store | /openai/api_key |
 
@@ -40,7 +40,7 @@ For example, to deploy the stack using the AWS CLI, you can use the following co
 ```bash
 aws cloudformation create-stack --stack-name chatgpt-streamlit \
 --template-body file://cf.yaml \
---parameters ParameterKey=AllowedIPs,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
+--parameters ParameterKey=AllowedIP,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
 ```
 
 This will create a new stack called `chatgpt-streamlit` using the `cf.yaml` template file and the `CAPABILITY_IAM` capability.

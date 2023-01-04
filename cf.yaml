@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
-  AllowedIPs:
+  AllowedIP:
     Type: String
     Description: Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer
     Default: "0.0.0.0/0"
@@ -323,7 +323,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: !Ref AllowedIPs
+          CidrIp: !Ref AllowedIP
       SecurityGroupEgress:
         - IpProtocol: -1
           CidrIp: 0.0.0.0/0
