@@ -19,13 +19,19 @@ This project includes a Streamlit-based chatbot operationalized in AWS using AWS
 
 ### CloudFormation Stack Deployment
 
+This CloudFormation template creates a Virtual Private Cloud (VPC) with four subnets (two public and two private), an Internet Gateway, and a NAT Gateway. It also creates four route tables (one for each subnet) and routes for each route table to direct traffic to the Internet Gateway or NAT Gateway as appropriate.
+
+The VPC has a CIDR block of 10.0.0.0/16, and the four subnets are created with CIDR blocks of 10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24, and 10.0.4.0/24. The public subnets are mapped to have public IP addresses on launch, and the private subnets are not.
+
+There are also a few parameters defined at the beginning of the template that allow the user to specify an allowed IP address range for accessing port 80 on the load balancer, the name of an Elastic Container Registry (ECR) repository, and the path to an API key in the SSM Parameter Store.
+
 To deploy the CloudFormation stack for this project, use the `./cf.yaml` file. You can do this using the AWS Management Console, the AWS CLI, or the AWS SDKs.
 
 #### CloudFormation Parameters
 
 | Parameter | Description | Default Value |
 | --- | --- | --- |
-| AllowedIPs | Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer | 0.0.0.0/0 |
+| AllowedIP | Comma-separated list of IP addresses that should be allowed to access port 80 on the load balancer | 0.0.0.0/0 |
 | Repository | The name of the ECR repository | public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest |
 | ChatGptApiKeyPath | ChatGPT API Key path in SSM Parameter Store | /openai/api_key |
 
@@ -40,7 +46,7 @@ For example, to deploy the stack using the AWS CLI, you can use the following co
 ```bash
 aws cloudformation create-stack --stack-name chatgpt-streamlit \
 --template-body file://cf.yaml \
---parameters ParameterKey=AllowedIPs,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
+--parameters ParameterKey=AllowedIP,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
 ```
 
 This will create a new stack called `chatgpt-streamlit` using the `cf.yaml` template file and the `CAPABILITY_IAM` capability.
