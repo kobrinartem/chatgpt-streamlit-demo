@@ -38,7 +38,7 @@ def query(message):
 	return response.text
 
 def get_text():
-    message = st.text_input('You:')
+    message = st.text_input('You:', '')
     return message 
 
 # Get the user's message
@@ -60,16 +60,15 @@ if user_input:
     audio_bytes = audio_stream.read()
     
     # Play the audio
-    # st.audio(audio_bytes)
     st.session_state.polly.append(audio_bytes)
 
 if st.session_state['generated']:
 
     for i in range(len(st.session_state['generated'])-1, -1, -1):
-        st.text(f'Bot: {st.session_state["generated"][i]}')
-        st.text(f'Bot Audio: ')
+        st.markdown(f'**Bot:** {st.session_state["generated"][i]}')
+        st.markdown(f'**Bot Audio:** ')
         st.audio(st.session_state["polly"][i])
-        st.text(f'You: {st.session_state["past"][i]}')
+        st.markdown(f'**You:** {st.session_state["past"][i]}')
 
 
 

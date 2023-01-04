@@ -9,7 +9,7 @@ Parameters:
   Repository:
     Type: String
     Description: The name of the ECR repository
-    Default: public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest
+    Default: public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:chatbot
 
   ChatGptApiKeyPath:
     Type: String
