@@ -38,15 +38,18 @@ To deploy the CloudFormation stack for this project, use the `./cf.yaml` file. Y
 For example, to deploy the stack using the AWS CLI, you can use the following command with default values:
 
 ```bash
-aws cloudformation create-stack --stack-name chatgpt-streamlit --template-body file://cf.yaml --capabilities CAPABILITY_IAM
+aws cloudformation create-stack \
+  --stack-name chatgpt-streamlit \
+  --template-body file://cf.yaml \
+  --capabilities CAPABILITY_IAM
 ```
 
 For example, to deploy the stack using the AWS CLI, you can use the following command with custom values:
 
 ```bash
 aws cloudformation create-stack --stack-name chatgpt-streamlit \
---template-body file://cf.yaml \
---parameters ParameterKey=AllowedIP,ParameterValue=1.2.3.4/32,1.2.3.5/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
+  --template-body file://cf.yaml \
+  --parameters ParameterKey=AllowedIP,ParameterValue=1.2.3.4/32 ParameterKey=Repository,ParameterValue=public.ecr.aws/a9t7y4w6/demo-chatgpt-streamlit:latest ParameterKey=ChatGptApiKeyPath,ParameterValue=/openai/api_key
 ```
 
 This will create a new stack called `chatgpt-streamlit` using the `cf.yaml` template file and the `CAPABILITY_IAM` capability.
