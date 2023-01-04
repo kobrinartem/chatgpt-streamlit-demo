@@ -19,6 +19,12 @@ This project includes a Streamlit-based chatbot operationalized in AWS using AWS
 
 ### CloudFormation Stack Deployment
 
+This CloudFormation template creates a Virtual Private Cloud (VPC) with four subnets (two public and two private), an Internet Gateway, and a NAT Gateway. It also creates four route tables (one for each subnet) and routes for each route table to direct traffic to the Internet Gateway or NAT Gateway as appropriate.
+
+The VPC has a CIDR block of 10.0.0.0/16, and the four subnets are created with CIDR blocks of 10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24, and 10.0.4.0/24. The public subnets are mapped to have public IP addresses on launch, and the private subnets are not.
+
+There are also a few parameters defined at the beginning of the template that allow the user to specify an allowed IP address range for accessing port 80 on the load balancer, the name of an Elastic Container Registry (ECR) repository, and the path to an API key in the SSM Parameter Store.
+
 To deploy the CloudFormation stack for this project, use the `./cf.yaml` file. You can do this using the AWS Management Console, the AWS CLI, or the AWS SDKs.
 
 #### CloudFormation Parameters
